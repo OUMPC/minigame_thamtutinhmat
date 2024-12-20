@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -8,6 +9,7 @@ const port = process.env.PORT || 3000;
 const dbPath = path.join(__dirname, 'data', 'leaderboard.db');
 const db = new sqlite3.Database(dbPath);
 
+app.use(cors()); 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 

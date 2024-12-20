@@ -45,14 +45,14 @@ const sfx = {
 }
 
 function setVolume() {
-    sfx['background'].volume = 0.2;
-    sfx['game'].volume = 0.2;
-    sfx['win'].volume = 0.0;
+    sfx['background'].volume = 0.5;
+    sfx['game'].volume = 0.5;
+    sfx['win'].volume = 0.7;
     sfx['lose'].volume = 0.5;
     sfx['click'].volume = 0.5;
     sfx['correct'].volume = 0.7;
     sfx['cd'].volume = 0.5;
-    sfx['wrong'].volume = 0.5;
+    sfx['wrong'].volume = 0.6;
 }
 
 function initEvents() {
