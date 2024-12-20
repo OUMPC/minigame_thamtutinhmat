@@ -43,9 +43,9 @@ const sfx = {
 }
 
 function setVolume() {
-    sfx['background'].volume = 0.4;
-    sfx['game'].volume = 0.4;
-    sfx['win'].volume = 0.5;
+    sfx['background'].volume = 0.2;
+    sfx['game'].volume = 0.2;
+    sfx['win'].volume = 0.4;
     sfx['lose'].volume = 0.5;
     sfx['click'].volume = 0.5;
     sfx['correct'].volume = 0.7;
@@ -336,10 +336,10 @@ function changeColor(currentTime, duration) {
 }
 
 function checkAnswer(data, x_pct, y_pct) {
-    console.log(`
-        "x": ${x_pct},
-        "y": ${y_pct},
-        `);   
+    // console.log(`
+    //     "x": ${x_pct},
+    //     "y": ${y_pct},
+    //     `);   
     let sub = data.sub;
     points = data.p
     for (let point of points) {
