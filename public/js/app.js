@@ -4,8 +4,9 @@ const config = {
 }
 
 class Sound extends Audio {
-    constructor(src) {
+    constructor(src, vol=0.4) {
         super(src);
+        this.volume = vol;
     }
 
     play(vol=1) {
@@ -30,14 +31,14 @@ class Sound extends Audio {
 }
 
 const sfx = {
-    'background': new Sound('/audio/menu.m4a'),
-    'game': new Sound('/audio/game.mp3'),
-    'win': new Sound('/audio/win.mp3'),
-    'lose': new Sound('/audio/lose.m4a'),
-    'click': new Sound('/audio/click.mp3'),
-    'correct': new Sound('/audio/correct.mp3'),
-    'cd': new Sound('/audio/cd.mp3'),
-    'wrong': new Sound('/audio/wrong.mp3')
+    'background': new Sound('/audio/menu.m4a', 0.4),
+    'game': new Sound('/audio/game.mp3', 0.4),
+    'win': new Sound('/audio/win.mp3', 0.5),
+    'lose': new Sound('/audio/lose.m4a', 0.5),
+    'click': new Sound('/audio/click.mp3', 0.5),
+    'correct': new Sound('/audio/correct.mp3', 0.5),
+    'cd': new Sound('/audio/cd.mp3', 0.5),
+    'wrong': new Sound('/audio/wrong.mp3', 0.5)
 }
 
 function initEvents() {
@@ -70,7 +71,7 @@ $("#music-btn").click(function() {
 $('body').click(function() {
     if (!config.first_interaction) {
         config.first_interaction = true;
-        sfx['background'].playInf(0.5);
+        sfx['background'].playInf();
     }
 })
 
@@ -144,7 +145,7 @@ function toMainMenu() {
     $("#bg_mascot").show();
     sfx['game'].pause();
     sfx['game'].currentTime = 0;
-    sfx['background'].playInf(0.5);
+    sfx['background'].playInf();
 }
 
 function toSelectLevel() {
@@ -214,7 +215,7 @@ function toGame(level) {
     
 
     setTimeout(() => {
-        sfx['game'].playInf(0.5);
+        sfx['game'].playInf();
         $("#game-screen").show();
         $("#pic1 img").attr("src", level.img_1);
         $("#pic2 img").attr("src", level.img_2);
@@ -236,7 +237,7 @@ function toGame(level) {
                 clearInterval(loop);
                 sfx['game'].pause();
                 sfx['game'].currentTime = 0;
-                sfx['lose'].play(0.5);
+                sfx['lose'].play();
                 $("#lose").css("display", "flex");
                 
                 $("#lose").click(function() {
@@ -252,7 +253,7 @@ function toGame(level) {
                 clearEvents() 
                 sfx['game'].pause();
                 sfx['game'].currentTime = 0;
-                sfx['win'].play(0.5);
+                sfx['win'].play();
                 $("#win").css("display", "flex");
             
                 setTimeout(() => {
@@ -337,11 +338,11 @@ function checkAnswer(data, x_pct, y_pct) {
             point.checked = true;
             data.cur += 1;
             drawRightPoint(point.x, point.y);
-            sfx['correct'].play(1);
+            sfx['correct'].play();
             return 0;
         }
     }
-    sfx['wrong'].play(0.5);
+    sfx['wrong'].play();
     return sub;
 }
 
@@ -379,7 +380,7 @@ function clearDraw() {
 }
 
 function runOverplay() {
-    sfx['cd'].play(0.4);
+    sfx['cd'].play();
     $("#overplay").css("display", "flex");
     const cap = ["GO!", "1", "2", "3"];
     $("#overplay").text(cap.pop());
