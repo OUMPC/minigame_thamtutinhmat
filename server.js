@@ -108,8 +108,9 @@ app.post('/leaderboard', (req, res) => {
     });
 });
 
-app.delete('/leaderboard', (req, res) => {
-    const { pass } = req.body;
+
+app.get('/reset', (req, res) => {
+    const { pass } = req.query;
     if (pass === 'mpcreset') {
         db.run('DELETE FROM leaderboard', (err) => {
             if (err) {
@@ -122,7 +123,6 @@ app.delete('/leaderboard', (req, res) => {
         res.status(403).json({ error: 'Unauthorized' });
     }
 });
-
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
