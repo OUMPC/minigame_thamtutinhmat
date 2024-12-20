@@ -112,6 +112,7 @@ $("#start").click(function() {
     localStorage.setItem("player-name", $("#player-name").val());
     $("#back-home").show();
     $("#bg_mascot").hide();
+    $("#info").hide();
     toSelectLevel();
 })
 
@@ -149,7 +150,7 @@ $("#back-home").click(function() {
 })
 
 function toMainMenu() {
-    
+    $("#info").show();
     $("#main-menu").show();
     $("#level-menu").hide();
     $("#game-screen").hide();
@@ -160,6 +161,14 @@ function toMainMenu() {
     sfx['game'].currentTime = 0;
     sfx['background'].playInf();
 }
+
+$("#info").click(function() {
+    $("#info-description").css("display", "flex");
+})
+
+$("#close_info").click(function() {
+    $("#info-description").hide();
+})
 
 function toSelectLevel() {
     $("#back-home").show();
@@ -330,10 +339,19 @@ function saveScore(score, level) {
 }
 
 function changeColor(currentTime, duration) {
-    // Yellow to orange to red
-    const r = 255;
-    const g = Math.floor(255 * currentTime / duration);
-    const b = 0;
+    // Màu thanh thời gian từ Xanh đậm -> Cam -> Đỏ
+    const percentage = currentTime / duration;
+    let r, g, b;
+
+    if (percentage > 0.5) {
+        r = 255 * (1 - 2 * (percentage - 0.5));
+        g = 255;
+        b = 0;
+    } else {
+        r = 255;
+        g = 255 * (2 * percentage);
+        b = 0;
+    }
     $("#line-time div").css("background-color", `rgb(${r}, ${g}, ${b})`);
 }
 
@@ -363,22 +381,34 @@ function drawRightPoint(x_pct, y_pct) {
     const canvas1 = document.getElementById('cv_pic1');
     const ctx1 = canvas1.getContext('2d');
 
-    ctx1.strokeStyle = 'cyan';
-    ctx1.lineWidth = 2;
+    ctx1.strokeStyle = 'black';
+    ctx1.lineWidth = 4;
     ctx1.beginPath();
-    const radius = canvas1.width*0.05;
+    const radius = canvas1.width * 0.05;
     const x = x_pct * canvas1.width;
     const y = y_pct * canvas1.height;
-    ctx1.arc(x, y, radius, 0, 5 * Math.PI);
+    ctx1.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx1.stroke();
+
+    ctx1.strokeStyle = 'white';
+    ctx1.lineWidth = 2;
+    ctx1.beginPath();
+    ctx1.arc(x, y, radius, 0, 2 * Math.PI);
     ctx1.stroke();
 
     const canvas2 = document.getElementById('cv_pic2');
     const ctx2 = canvas2.getContext('2d');
 
-    ctx2.strokeStyle = 'cyan';
+    ctx2.strokeStyle = 'black';
+    ctx2.lineWidth = 4;
+    ctx2.beginPath();
+    ctx2.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx2.stroke();
+
+    ctx2.strokeStyle = 'white';
     ctx2.lineWidth = 2;
     ctx2.beginPath();
-    ctx2.arc(x, y, radius, 0, 5 * Math.PI);
+    ctx2.arc(x, y, radius, 0, 2 * Math.PI);
     ctx2.stroke();
 }
 

@@ -146,7 +146,8 @@ main{
 
 #back-home,
 #leaderboard-btn,
-#music-btn{
+#music-btn,
+#info{
     position: absolute;
     top: .5rem;
     left: 2rem;
@@ -155,6 +156,10 @@ main{
     border: 1px solid #0000001a;
     border-radius: 6px;
     font-weight: 600;
+}
+
+#info{
+    top: 3rem;
 }
 
 #leaderboard-btn{
@@ -321,3 +326,52 @@ table tr:hover {
     text-align: center;
 }
 
+#info-description{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000088;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    color: #fff;
+}
+
+#info-description>div{
+    width: 80%;
+    max-width: 1000px;
+    padding: 1rem;
+    background-color: #00000019;
+    border-radius: 1rem;
+}
+
+#info-description>div>h1{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+}
+
+#info-description>div a{
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #07a0ff;
+    color: #fff;
+    text-decoration: none;
+}
+
+#info-description>div ul{
+    padding: 0;
+}
+
+#info-description>div ul li{
+    margin: .5rem 0;
+    margin-left: 1rem;
+}
