@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
-const host = '0.0.0.0';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -103,6 +102,6 @@ app.post('/leaderboard', (req, res) => {
 //     });
 // });
 
-app.listen(port, host, () => {
-    console.log(`Server is running on http://${host}:${port}`);
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
