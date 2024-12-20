@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
+const host = '0.0.0.0';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -88,20 +89,20 @@ app.post('/leaderboard', (req, res) => {
     });
 });
 
-// Save new map
-app.post('/save-map', (req, res) => {
-    const { name, data } = req.body;
-    const mapPath = path.join(__dirname, 'public', 'maps', `${name}.json`);
+// // Save new map
+// app.post('/save-map', (req, res) => {
+//     const { name, data } = req.body;
+//     const mapPath = path.join(__dirname, 'public', 'maps', `${name}.json`);
 
-    fs.writeFile(mapPath, JSON.stringify(data), err => {
-        if (err) {
-            res.status(500).json({ error: 'Error saving map' });
-        } else {
-            res.json({ success: true });
-        }
-    });
-});
+//     fs.writeFile(mapPath, JSON.stringify(data), err => {
+//         if (err) {
+//             res.status(500).json({ error: 'Error saving map' });
+//         } else {
+//             res.json({ success: true });
+//         }
+//     });
+// });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.listen(port, host, () => {
+    console.log(`Server is running on http://${host}:${port}`);
 });
