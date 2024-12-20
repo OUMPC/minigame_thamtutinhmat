@@ -306,4 +306,18 @@ table tr:hover {
     background-color: #f1f1f1;
 }
 
+#block{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000088;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    color: #fff;
+    text-align: center;
+}
 

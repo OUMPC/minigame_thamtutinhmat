@@ -404,5 +404,16 @@ function runOverplay() {
     }, 1000);
 }
 
+function checkScreenSize(){
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    if(w*2/3 < h) {
+        $("#block").css("display", "flex");
+    }else{
+        $("#block").css("display", "none");
+    }    
+}
+checkScreenSize()
+window.addEventListener('resize', checkScreenSize);
 
 
