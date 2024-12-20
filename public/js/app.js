@@ -41,7 +41,8 @@ const sfx = {
     'click': new Sound('/audio/click.mp3'),
     'correct': new Sound('/audio/correct.mp3'),
     'cd': new Sound('/audio/cd.mp3'),
-    'wrong': new Sound('/audio/wrong.mp3')
+    'wrong': new Sound('/audio/wrong.mp3'),
+    'warn': new Sound('/audio/warn.mp3'),
 }
 
 function setVolume() {
@@ -53,6 +54,7 @@ function setVolume() {
     sfx['correct'].volume = 0.7;
     sfx['cd'].volume = 0.5;
     sfx['wrong'].volume = 0.6;
+    sfx['warn'].volume = 0.6;
 }
 
 function initEvents() {
@@ -206,6 +208,8 @@ function toSelectLevel() {
 }
 
 function toGame(level) {
+    let warn_time = false
+
     sfx['background'].pause();
     sfx['background'].currentTime = 0;
     
@@ -253,6 +257,13 @@ function toGame(level) {
         let currentTime = duration;
         let loop = setInterval(() => {
             changeColor(currentTime, duration);
+            $("#cur-time").text(`${currentTime >= 0 ? Math.round(currentTime/1000) : 0}s`);
+            if (currentTime <= duration/3 && !warn_time) {
+                warn_time = true;
+                sfx['warn'].play();
+                $("#line-time").effect("shake", { times: 2 }, 150);
+            }
+
             if (currentTime <= 0) {
                 clearEvents() 
                 $("#game-screen").hide();
@@ -298,6 +309,7 @@ function toGame(level) {
             x_pct = event.offsetX / $('#pic1 img').width();
             y_pct = event.offsetY / $('#pic1 img').height();
             result = checkAnswer(data, x_pct, y_pct);
+            $("#cur-score").text(data.cur);
             currentTime = currentTime - result;
         });
 
@@ -305,6 +317,7 @@ function toGame(level) {
             x_pct = event.offsetX / $('#pic2 img').width();
             y_pct = event.offsetY / $('#pic2 img').height();
             result = checkAnswer(data, x_pct, y_pct);
+            $("#cur-score").text(data.cur);
             currentTime = currentTime - result;
         });
     }, 4000);
@@ -374,6 +387,8 @@ function checkAnswer(data, x_pct, y_pct) {
         }
     }
     sfx['wrong'].play();
+    $("#game")
+    .effect("shake", { times: 2 }, 150);
     return sub;
 }
 
