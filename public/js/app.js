@@ -8,13 +8,15 @@ class Sound extends Audio {
         super(src);
     }
 
-    play(vol=1) {
+    play(vol=null) {
         this.currentTime = 0;
-        this.volume = vol;
+        if (vol) {
+            this.volume = vol;
+        }
         super.play();
     }
 
-    playInf(vol, time_back=0) {
+    playInf(vol=null, time_back=0) {
         this.loop = true;
         if (vol) {
             this.volume = vol;
@@ -45,7 +47,7 @@ const sfx = {
 function setVolume() {
     sfx['background'].volume = 0.2;
     sfx['game'].volume = 0.2;
-    sfx['win'].volume = 0.4;
+    sfx['win'].volume = 0.0;
     sfx['lose'].volume = 0.5;
     sfx['click'].volume = 0.5;
     sfx['correct'].volume = 0.7;
