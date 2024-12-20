@@ -247,7 +247,7 @@ main{
 }
 
 #line-time{
-    width: 5px;
+    width: 10px;
     border: 1px solid #000000;
     position: relative;
     background-color: #fff

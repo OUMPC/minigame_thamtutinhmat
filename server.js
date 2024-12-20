@@ -52,55 +52,31 @@ app.get('/leaderboard', (req, res) => {
 });
 
 // Update leaderboard
-app.post('/leaderboard', (req, res) => {
+app.post('/leaderboard', async (req, res) => {
     const leaderboardPath = path.join(__dirname, 'data/leaderboard.json');
     const { name, score, level } = req.body;
 
-    fs.readFile(leaderboardPath, 'utf8', (err, data) => {
-        if (err) {
-            res.status(500).json({ error: 'Error reading leaderboard' });
+    try {
+        let data = await fs.promises.readFile(leaderboardPath, 'utf8');
+        let leaderboard = JSON.parse(data);
+
+        const existingEntry = leaderboard.find(entry => entry.name === name && entry.level === level);
+        if (existingEntry) {
+            if (score > existingEntry.score) {
+                existingEntry.score = score;
+            }
         } else {
-            let leaderboard;
-            try {
-                leaderboard = JSON.parse(data);
-            } catch (e) {
-                leaderboard = [];
-            }
-            const existingEntry = leaderboard.find(entry => entry.name === name && entry.level === level);
-            if (existingEntry) {
-                if (score > existingEntry.score) {
-                    existingEntry.score = score;
-                }
-            } else {
-                leaderboard.push({ name, score, level });
-            }
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard = leaderboard.slice(0, 10); // Keep top 10
-
-            fs.writeFile(leaderboardPath, JSON.stringify(leaderboard), err => {
-                if (err) {
-                    res.status(500).json({ error: 'Error updating leaderboard' });
-                } else {
-                    res.json({ success: true });
-                }
-            });
+            leaderboard.push({ name, score, level });
         }
-    });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 10); // Keep top 10
+
+        await fs.promises.writeFile(leaderboardPath, JSON.stringify(leaderboard));
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: 'Error updating leaderboard' });
+    }
 });
-
-// // Save new map
-// app.post('/save-map', (req, res) => {
-//     const { name, data } = req.body;
-//     const mapPath = path.join(__dirname, 'public', 'maps', `${name}.json`);
-
-//     fs.writeFile(mapPath, JSON.stringify(data), err => {
-//         if (err) {
-//             res.status(500).json({ error: 'Error saving map' });
-//         } else {
-//             res.json({ success: true });
-//         }
-//     });
-// });
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
