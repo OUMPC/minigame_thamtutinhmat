@@ -4,9 +4,8 @@ const config = {
 }
 
 class Sound extends Audio {
-    constructor(src, vol=0.4) {
+    constructor(src) {
         super(src);
-        this.volume = vol;
     }
 
     play(vol=1) {
@@ -31,14 +30,25 @@ class Sound extends Audio {
 }
 
 const sfx = {
-    'background': new Sound('/audio/menu.m4a', 0.4),
-    'game': new Sound('/audio/game.mp3', 0.4),
-    'win': new Sound('/audio/win.mp3', 0.5),
-    'lose': new Sound('/audio/lose.m4a', 0.5),
-    'click': new Sound('/audio/click.mp3', 0.5),
-    'correct': new Sound('/audio/correct.mp3', 0.5),
-    'cd': new Sound('/audio/cd.mp3', 0.5),
-    'wrong': new Sound('/audio/wrong.mp3', 0.5)
+    'background': new Sound('/audio/menu.m4a'),
+    'game': new Sound('/audio/game.mp3'),
+    'win': new Sound('/audio/win.mp3'),
+    'lose': new Sound('/audio/lose.m4a'),
+    'click': new Sound('/audio/click.mp3'),
+    'correct': new Sound('/audio/correct.mp3'),
+    'cd': new Sound('/audio/cd.mp3'),
+    'wrong': new Sound('/audio/wrong.mp3')
+}
+
+function setVolume() {
+    sfx['background'].volume = 0.4;
+    sfx['game'].volume = 0.4;
+    sfx['win'].volume = 0.5;
+    sfx['lose'].volume = 0.5;
+    sfx['click'].volume = 0.5;
+    sfx['correct'].volume = 0.7;
+    sfx['cd'].volume = 0.5;
+    sfx['wrong'].volume = 0.5;
 }
 
 function initEvents() {
@@ -61,9 +71,7 @@ $("#music-btn").click(function() {
         $("#music-btn i").removeClass("bi-volume-up").addClass("bi-volume-mute");
     } else {
         config.music = true;
-        for (let key in sfx) {
-            sfx[key].volume = 0.4;
-        }
+        setVolume()
         $("#music-btn i").removeClass("bi-volume-mute").addClass("bi-volume-up");
     }
 })
