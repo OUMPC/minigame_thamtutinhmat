@@ -16,7 +16,8 @@ class Sound extends Audio {
 
     playInf(vol, time_back=0) {
         this.loop = true;
-        this.volume = vol;
+        if (vol) {
+            this.volume = vol;
         this.onended = () => {
             this.currentTime = time_back;
             this.play();
