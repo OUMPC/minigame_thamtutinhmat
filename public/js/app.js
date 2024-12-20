@@ -369,10 +369,10 @@ function changeColor(currentTime, duration) {
 }
 
 function checkAnswer(data, x_pct, y_pct) {
-    // console.log(`
-    //     "x": ${x_pct},
-    //     "y": ${y_pct},
-    //     `);   
+    console.log(`
+        "x": ${x_pct},
+        "y": ${y_pct},
+        `);   
     let sub = data.sub;
     points = data.p
     for (let point of points) {

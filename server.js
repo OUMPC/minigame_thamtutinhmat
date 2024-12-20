@@ -64,7 +64,7 @@ app.get('/levels', async (req, res) => {
 });
 
 app.get('/leaderboard', (req, res) => {
-    db.all('SELECT name, score, level FROM leaderboard ORDER BY score DESC LIMIT 10', (err, rows) => {
+    db.all('SELECT name, score, level FROM leaderboard ORDER BY score DESC LIMIT 20', (err, rows) => {
         if (err) {
             res.status(500).json({ error: 'Error reading leaderboard' });
         } else {

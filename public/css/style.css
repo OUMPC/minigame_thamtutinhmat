@@ -250,9 +250,8 @@ main{
 
 
 #game{
-   
     margin: auto; 
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     aspect-ratio: 2/1;
     height: 100%;
     display: flex;
