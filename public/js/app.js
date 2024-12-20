@@ -210,6 +210,8 @@ function toGame(level) {
     runOverplay()
     $("#pic1 img").attr("src", level.img_1);
     $("#pic2 img").attr("src", level.img_2);
+    // Canva
+    
 
     setTimeout(() => {
         sfx['game'].playInf(0.5);
@@ -217,6 +219,13 @@ function toGame(level) {
         $("#pic1 img").attr("src", level.img_1);
         $("#pic2 img").attr("src", level.img_2);
         
+        const canvas1 = document.getElementById('cv_pic1');
+        const canvas2 = document.getElementById('cv_pic2');
+        canvas1.width = $('#pic1').width();
+        canvas1.height = $('#pic1').height();
+        canvas2.width = $('#pic2').width();
+        canvas2.height = $('#pic2').height();
+
         const duration = 1000*level.time;
         let currentTime = duration;
         let loop = setInterval(() => {
@@ -339,10 +348,11 @@ function checkAnswer(data, x_pct, y_pct) {
 function drawRightPoint(x_pct, y_pct) {
     const canvas1 = document.getElementById('cv_pic1');
     const ctx1 = canvas1.getContext('2d');
+
     ctx1.strokeStyle = 'cyan';
     ctx1.lineWidth = 2;
     ctx1.beginPath();
-    const radius = 5;
+    const radius = canvas1.width*0.05;
     const x = x_pct * canvas1.width;
     const y = y_pct * canvas1.height;
     ctx1.arc(x, y, radius, 0, 5 * Math.PI);
@@ -350,6 +360,7 @@ function drawRightPoint(x_pct, y_pct) {
 
     const canvas2 = document.getElementById('cv_pic2');
     const ctx2 = canvas2.getContext('2d');
+
     ctx2.strokeStyle = 'cyan';
     ctx2.lineWidth = 2;
     ctx2.beginPath();
