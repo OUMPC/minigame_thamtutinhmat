@@ -4,8 +4,22 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const dbPath = path.join(__dirname, 'data', 'leaderboard.db');
+const db = new sqlite3.Database(dbPath);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
+db.serialize(() => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS leaderboard (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            score INTEGER NOT NULL,
+            level TEXT NOT NULL
+        )
+    `);
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -41,43 +55,49 @@ app.get('/levels', async (req, res) => {
 });
 
 app.get('/leaderboard', (req, res) => {
-    const leaderboardPath = path.join(__dirname, 'data/leaderboard.json');
-    fs.readFile(leaderboardPath, 'utf8', (err, data) => {
+    db.all('SELECT name, score, level FROM leaderboard ORDER BY score DESC LIMIT 10', (err, rows) => {
         if (err) {
             res.status(500).json({ error: 'Error reading leaderboard' });
         } else {
-            res.json(JSON.parse(data));
+            res.json(rows);
         }
     });
 });
 
 // Update leaderboard
-app.post('/leaderboard', async (req, res) => {
-    const leaderboardPath = path.join(__dirname, 'data/leaderboard.json');
+app.post('/leaderboard', (req, res) => {
     const { name, score, level } = req.body;
 
-    try {
-        let data = await fs.promises.readFile(leaderboardPath, 'utf8');
-        let leaderboard = JSON.parse(data);
-
-        const existingEntry = leaderboard.find(entry => entry.name === name && entry.level === level);
-        if (existingEntry) {
-            if (score > existingEntry.score) {
-                existingEntry.score = score;
+    db.serialize(() => {
+        db.get('SELECT * FROM leaderboard WHERE name = ? AND level = ?', [name, level], (err, row) => {
+            if (err) {
+                res.status(500).json({ error: 'Error reading leaderboard' });
+            } else {
+                if (row) {
+                    if (score > row.score) {
+                        db.run('UPDATE leaderboard SET score = ? WHERE id = ?', [score, row.id], (err) => {
+                            if (err) {
+                                res.status(500).json({ error: 'Error updating leaderboard' });
+                            } else {
+                                res.json({ success: true });
+                            }
+                        });
+                    } else {
+                        res.json({ success: true });
+                    }
+                } else {
+                    db.run('INSERT INTO leaderboard (name, score, level) VALUES (?, ?, ?)', [name, score, level], (err) => {
+                        if (err) {
+                            res.status(500).json({ error: 'Error updating leaderboard' });
+                        } else {
+                            res.json({ success: true });
+                        }
+                    });
+                }
             }
-        } else {
-            leaderboard.push({ name, score, level });
-        }
-        leaderboard.sort((a, b) => b.score - a.score);
-        leaderboard = leaderboard.slice(0, 10); // Keep top 10
-
-        await fs.promises.writeFile(leaderboardPath, JSON.stringify(leaderboard));
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: 'Error updating leaderboard' });
-    }
+        });
+    });
 });
-
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
