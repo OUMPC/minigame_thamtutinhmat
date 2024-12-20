@@ -63,6 +63,7 @@ function initEvents() {
 }
 
 initEvents()
+setVolume()
 
 $("#music-btn").click(function() {
     if (config.music) {
