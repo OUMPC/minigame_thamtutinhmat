@@ -1,3 +1,4 @@
 node_modules
 .vercel
-data\leaderboard.db
+/data/leaderboard.db
+data/leaderboard.db
