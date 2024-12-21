@@ -7,13 +7,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 let db;
-const dbPath = path.join(__dirname, 'data', 'leaderboard.db');
-const tmpDbPath = '/tmp/leaderboard.db';
-
 if (process.env.NODE_ENV === 'production') {
-    fs.copyFileSync(dbPath, tmpDbPath);
-    db = new sqlite3.Database(tmpDbPath);
+    db = new sqlite3.Database('/tmp/leaderboard.db');
+    fs.copyFileSync(path.join(__dirname, 'data', 'leaderboard.db'), '/tmp/leaderboard.db');
 } else {
+    const dbPath = path.join(__dirname, 'data', 'leaderboard.db');
     db = new sqlite3.Database(dbPath);
 }
 
@@ -129,4 +127,3 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
- 
