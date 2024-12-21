@@ -33,6 +33,30 @@ class Sound extends Audio {
     }
 }
 
+function initNamePlayer() {
+    const name = localStorage.getItem("player-name");
+    if (name && name.trim() != "") {
+        $("#player-name").val(name);
+    }else{
+        const a = ["Con gà con", "Chim cánh cụt", "Chó đóm con", "Mèo xù lông", "Heo hồng ụt ịt", "Cá vàng bơi", "Cá sấu lười", "Chuột nhắt", "Chim sẻ đi nắng", "Chim én bay"]
+        // ID 8 chữ số
+        const id = Date.now().toString().slice(-8);
+        const name = a[Math.floor(Math.random() * a.length)] + " - " + id;
+        $("#player-name").attr("placeholder",   name);
+        localStorage.setItem("player-name", name);
+    }
+}
+
+$("#player-name").change(function() {
+    localStorage.setItem("player-name", $("#player-name").val());
+    if ($("#player-name").val().length == 0) {
+        initNamePlayer()
+        return;
+    }
+})
+
+initNamePlayer()
+
 const sfx = {
     'background': new Sound('/audio/menu.m4a'),
     'game': new Sound('/audio/game.mp3'),
@@ -107,11 +131,11 @@ $("#full-screen").click(function() {
 
 $("#start").click(function() {
     clearDraw() 
-    if ($("#player-name").val() == "") {
-        alert("Nhâp tên của bạn cái bạn ơi");
-        return;
-    }
-    localStorage.setItem("player-name", $("#player-name").val());
+    // if ($("#player-name").val() == "") {
+    //     alert("Nhâp tên của bạn cái bạn ơi");
+    //     return;
+    // }
+    // localStorage.setItem("player-name", $("#player-name").val());
     $("#back-home").show();
     $("#bg_mascot").hide();
     $("#info").hide();
@@ -135,7 +159,9 @@ $("#leaderboard-btn").click(function() {
                 return;
             }
             data.forEach((item, index) => {
-                $("#leaderboard-list").append(`<tr><td>${index+1}</td><td>${item.name}</td><td>${item.level}</td><td>${item.score}</td></tr>`)
+                $("#leaderboard-list").append(`<tr><td>${index+1}</td><td>${item.name}${
+                    item.name == localStorage.getItem("player-name")? " (Bạn)" : ""
+                }</td><td>${item.level}</td><td>${item.score}</td></tr>`)
             });
             // $("#leaderboard").show();
         },
@@ -220,7 +246,7 @@ function toGame(level) {
         'sub': level.time * 1000 / 15,
         'p': []
     }
-
+    $("#cur-score").text(data.cur);
     level["points"].forEach(point => {
         data.p.push({
             'x': point.x,
@@ -293,11 +319,10 @@ function toGame(level) {
                     $("#game-screen").hide();
                     $("#win").hide();
                 }, 4500);
-
+                saveScore(currentTime, level.name)
                 setTimeout(() => {
                     toSelectLevel()
-                    confirm("Bạn có muốn lưu điểm không?") && saveScore(currentTime, level.name);
-                }, 5000);
+                }, 3000);
 
                 return;
             }
@@ -343,10 +368,13 @@ function saveScore(score, level) {
     })
     .then(response => response.json())
     .then(() => {
-        alert("Đã lưu điểm");
+        createNotification({
+            title: "Đã lưu điểm số",
+            detail: `Điểm số của bạn đã được lưu lại`,
+            type: "right"
+        },3000)
     })
     .catch(error => {
-        alert("Lỗi khi lưu điểm");
         console.error("Error saving score:", error);
     });
 }

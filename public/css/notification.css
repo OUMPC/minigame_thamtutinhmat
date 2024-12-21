@@ -1,0 +1,43 @@
+#overplay-notification{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 999;
+    user-select: none;
+}
+
+#overplay-notification.terminal .box{
+    background-color: #111;
+    color: aliceblue;
+    font-family:monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    max-width: 300px;
+    width: 90vw;
+    cursor: pointer;
+}
+
+#overplay-notification .box .status{
+    font-size: 1.4rem;
+}
+
+#overplay-notification .box .header{
+    font-size: 1.1rem;
+}
+
+#overplay-notification .box.right{
+    color: aliceblue;
+}
+
+#overplay-notification .box.wrong{
+    color: rgb(255, 40, 40);
+}
+
+#overplay-notification .box.warning{
+    color: rgb(255, 115, 40);
+}
